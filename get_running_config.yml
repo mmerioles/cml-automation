@@ -1,0 +1,13 @@
+- name: Fetch Cisco running config
+  hosts: my_router
+  gather_facts: no
+  tasks:
+    - name: Get running config
+      cisco.ios.ios_command:
+        commands: show running-config
+      register: run_cfg
+
+    - name: Save config locally
+      copy:
+        content: "{{ run_cfg.stdout[0] }}"
+        dest: "./configs/{{ inventory_hostname }}-running.txt"
